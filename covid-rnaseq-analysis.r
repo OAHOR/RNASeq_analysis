@@ -147,7 +147,7 @@ boxplot(assay(vst))
 #differentially expressed genes (DEGs)
 unique(conditions)
 base::length(unique(conditions))
-plotPCA(vst, intgroup='conditions') +
+DESeq2::plotPCA(vst, intgroup='conditions') +
   theme_bw() + 
   theme(aspect.ratio = 0.75)
 #observe the cell line effect
@@ -744,6 +744,7 @@ kegg_a549 = clusterProfiler::enrichKEGG(gene = entrez_a549$entrezgene_id[!is.na(
                                         organism = 'hsa',
                                         pvalueCutoff = 0.05,
                                         universe = as.character(entrez_a549_uni$entrezgene_id))
+
 #As with enrichGO, the function summary() is deprecated and should not be used
 #summary(kegg_nhbe)
 #summary(kegg_a549)
@@ -765,8 +766,10 @@ readr::write_tsv(x = annotated_filter_df1_nhbe[annotated_filter_df1_nhbe$test==T
 #The current workspace can be saved with save.image(). Note that the parameter
 #"compression_level" doesn't work in this function. 
 save.image(file = ".RData", compress = "bzip2")
+#bzip2 compression is fairly slow.
+
 #And we can save individual objects with save()
-save(list = "annotated_filter_df1_nhbe", file = "annotated_filter_df1_nhbe",
+save(list = "annotated_filter_df1_nhbe", file = "annotated_filter_df1_nhbe.RData",
      compress = "bzip2", compression_level = 9, precheck = TRUE)
 
 
@@ -826,19 +829,28 @@ p1 <- ggplot2::ggplot(data = as.data.frame(pca_nhbe_top500$x), aes(x = PC1, y = 
   geom_point(size = 2) +
   scale_colour_discrete("Conditions") +
   theme_bw() +
+  theme(aspect.ratio = 0.75) +
   xlab(label = paste0("PC1 (", round((pca_nhbe_top500$sdev^2/sum(pca_nhbe_top500$sdev^2)*100)[1],0), "%)")) +
   ylab(label = paste0("PC2 (", round((pca_nhbe_top500$sdev^2/sum(pca_nhbe_top500$sdev^2)*100)[2],0), "%)"))
 p2 <- ggplot2::ggplot(data = as.data.frame(pca_a549_top500$x), aes(x = PC1, y = PC2, colour=factor(sample_table_a549$conditions, labels = c("\nmock\ninfected\n","\nSarscov2\ninfected\n")))) + 
   geom_point(size = 2) +
   scale_colour_discrete("Conditions") +
   theme_bw() +
+  theme(aspect.ratio = 0.75) +
   xlab(label = paste0("PC1 (", round((pca_a549_top500$sdev^2/sum(pca_a549_top500$sdev^2)*100)[1],0), "%)")) +
   ylab(label = paste0("PC2 (", round((pca_a549_top500$sdev^2/sum(pca_a549_top500$sdev^2)*100)[2],0), "%)"))
 cowplot::plot_grid(p1, p2, ncol = 2, labels = c('A', 'B'))
+#I'm not sure why this plot still doesn't fully resemble the plot generated
+#by plotPCA(). Perhaps plotPCA() specifically looks at p<0.1 and then sorts
+#for log2FoldChange?
 
+#Let's see if that's actually the case:
+pca_nhbe_top500 = prcomp(t(SummarizedExperiment::assay(vst_nhbe)[dplyr::arrange(.data = filter_df1_nhbe, desc(abs(log2FoldChange)))[1:500,]$ensgene,]))
+pca_a549_top500 = prcomp(t(SummarizedExperiment::assay(vst_a549)[dplyr::arrange(.data = filter_df1_a549, desc(abs(log2FoldChange)))[1:500,]$ensgene,]))
 
-
-
+#add rownames. This isn't needed for the ggplot per se. 
+rownames(pca_nhbe_top500$x) = sample_table_nhbe$`Sample Name`
+rownames(pca_a549_top500$x) = sample_table_a549$`Sample Name`
 
 
 

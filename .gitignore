@@ -11,7 +11,7 @@ GSM4432387/
 GSM4432388/
 GSM4432389/
 .Rhistory
-.RData
+*.RData
 gencode.v33.transcripts.fa
 .Rproj.user/
 .gitignore
