@@ -14,3 +14,5 @@ GSM4432389/
 .RData
 gencode.v33.transcripts.fa
 .Rproj.user/
+.gitignore
+.gitattributes
