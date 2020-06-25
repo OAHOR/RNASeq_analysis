@@ -1,7 +1,3 @@
-#Introduction ----
-#
-
-
 #Packages ----
 #These 3 packages (readr, dplyr and magrittr) are
 #part of the tidyverse package
