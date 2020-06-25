@@ -19,8 +19,9 @@ library(grid)
 library(lattice)
 library(cowplot)
 
-#Set working directory, where the data is
-setwd(getwd());
+#Set working directory, where the data is. This is purely for example
+#setwd("e:/temp/")
+setwd(getwd())
 
 #The readr library contains all the read_ functions
 #Tab complete will also work with filenames
