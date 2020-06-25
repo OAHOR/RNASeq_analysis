@@ -16,3 +16,4 @@ gencode.v33.transcripts.fa
 .Rproj.user/
 .gitignore
 .gitattributes
+*.txt
