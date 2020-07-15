@@ -4,6 +4,8 @@
 #4-6 workers. Setting this number higher while using a typical SATA HDD will not see any
 #speed advantage.
 N=4
+echo "This bash script should be run in a (conda) environment which contains"
+echo "the SRA-toolkit. You can install this via conda install sra-tools"
 
 #First go to the SRA run selector (https://www.ncbi.nlm.nih.gov/Traces/study/) and download
 #the metadata file (StaRunTable.txt) from a set of samples.
