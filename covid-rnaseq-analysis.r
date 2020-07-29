@@ -1,3 +1,7 @@
+#Install all the packages used in this analysis
+#install.packages("BiocManager")
+#BiocManager::install(c("readr","dplyr", "magrittr", "tximport", "DESeq2", "biomaRt", "gridExtra", "plotly", "pheatmap", "RColorBrewer", "clusterProfiler", "org.Hs.eg.db", "grid", "lattice", "cowplot"))
+
 #Packages ----
 #These 3 packages (readr, dplyr and magrittr) are
 #part of the tidyverse package
